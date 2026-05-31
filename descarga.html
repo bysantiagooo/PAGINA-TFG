@@ -47,21 +47,24 @@
           <div class="selector-group">
             <label>Tipo</label>
             <div class="btn-group">
-              <button class="sel-btn active" onclick="selectBtn(this, 'type')">Portable (PROXIMAMENTE)</button>
-              <button class="sel-btn" onclick="selectBtn(this, 'type')">EXE</button>
+              <button class="sel-btn" onclick="selectBtn(this, 'type')">Portable (PROXIMAMENTE)</button>
+              <button class="sel-btn active" onclick="selectBtn(this, 'type')">EXE</button>
             </div>
           </div>
         </div>
         <div class="dl-wrap">
-          <button class="btn-download">
+          <a href="https://drive.google.com/uc?export=download&id=1Tri5TkW8cLx0FVqZUPsEYsfNS30dUiSG"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="btn-download">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 3v13M7 11l5 5 5-5"/><path d="M3 19h18"/>
             </svg>
             Descargar
-          </button>
+          </a>
           <div class="dl-meta" id="dlMeta">
-            <strong>v1.0.0</strong> — Windows · Portable<br>
-            Tamaño aprox. <strong>??? MB</strong>
+            <strong>v1.0.0</strong> — Windows · EXE<br>
+            Tamaño aprox. <strong>38 MB</strong>
           </div>
         </div>
         <p class="thanks">Gracias por tu descarga 🎮</p>
@@ -89,13 +92,43 @@
     <a href="#">Trabajadores con sus enlaces a LinkedIn</a>
   </footer>
   <script>
+    const archivos = {
+      'Windows': {
+        'EXE': 'https://drive.google.com/uc?export=download&id=1Tri5TkW8cLx0FVqZUPsEYsfNS30dUiSG',
+        'Portable (PROXIMAMENTE)': null
+      },
+      'macOS (PROXIMAMENTE)': {
+        'EXE': null,
+        'Portable (PROXIMAMENTE)': null
+      },
+      'Linux (PROXIMAMENTE)': {
+        'EXE': null,
+        'Portable (PROXIMAMENTE)': null
+      }
+    };
+
     function selectBtn(btn, group) {
       const parent = btn.closest('.selector-group');
       parent.querySelectorAll('.sel-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      const platform = document.querySelector('.selector-group:nth-child(1) .sel-btn.active')?.textContent || 'Windows';
-      const type = document.querySelector('.selector-group:nth-child(2) .sel-btn.active')?.textContent || 'Portable';
-      document.getElementById('dlMeta').innerHTML = `<strong>v1.0.0</strong> — ${platform} · ${type}<br>Tamaño aprox. <strong>??? MB</strong>`;
+
+      const platform = document.querySelector('.selector-group:nth-child(1) .sel-btn.active')?.textContent.trim();
+      const type = document.querySelector('.selector-group:nth-child(2) .sel-btn.active')?.textContent.trim();
+      const enlace = archivos[platform]?.[type];
+      const dlBtn = document.querySelector('.btn-download');
+
+      document.getElementById('dlMeta').innerHTML =
+        `<strong>v1.0.0</strong> — ${platform} · ${type}<br>Tamaño aprox. <strong>38 MB</strong>`;
+
+      if (enlace) {
+        dlBtn.setAttribute('href', enlace);
+        dlBtn.style.opacity = '1';
+        dlBtn.style.pointerEvents = 'auto';
+      } else {
+        dlBtn.removeAttribute('href');
+        dlBtn.style.opacity = '0.4';
+        dlBtn.style.pointerEvents = 'none';
+      }
     }
   </script>
 </body>
